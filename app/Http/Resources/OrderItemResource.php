@@ -20,7 +20,7 @@ class OrderItemResource extends JsonResource
             'price'        => $this->price,
             'order_id'     => $this->order_id,
             'bouquet'      => new BouquetResource($this->whenLoaded('bouquet')),
-            'add_on'       => new AddOnResource($this->whenLoaded('addOn')),
+            'add_on'       => new AddOnsResource($this->whenLoaded('addOn')),
             'parent_item'  => new OrderItemResource($this->whenLoaded('parent')),
             'children'     => OrderItemResource::collection($this->whenLoaded('children')),
         ];

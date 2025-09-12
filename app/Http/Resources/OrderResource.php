@@ -22,7 +22,7 @@ class OrderResource extends JsonResource
             'customer'    => new CustomerResource($this->whenLoaded('customer')),
             'order_items' => OrderItemResource::collection($this->whenLoaded('orderItems')),
             'payment'     => new PaymentResource($this->whenLoaded('payment')),
-            'shipment'    => new ShipmentResource($this->whenLoaded('shipment')),
+            'shipment'    => new ShipmentsResource($this->whenLoaded('shipment')),
         ];
     }
 }

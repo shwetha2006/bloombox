@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Order;
 use App\Models\Bouquet;
 use App\Models\AddOn;
-use App\Models\Order_item;
+use App\Models\OrderItem;
 
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Order_item>
  */
-class Order_itemFactory extends Factory
+class OrderItemFactory extends Factory
 {
     /**
      * Define the model's default state.

@@ -23,7 +23,7 @@ class BouquetResource extends JsonResource
             'stock_quantity' => $this->stock_quantity,
             'category'       => new CategoryResource($this->whenLoaded('category')),
             'admin'          => new AdminResource($this->whenLoaded('admin')),
-            'add_ons'        => AddOnResource::collection($this->whenLoaded('addOns')),
+            'add_ons'        => AddOnsResource::collection($this->whenLoaded('addOns')),
         ];
     }
 }

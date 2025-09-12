@@ -9,7 +9,7 @@ use App\Models\Category;
 use App\Models\Bouquet;
 use App\Models\AddOn;
 use App\Models\Order;
-use App\Models\Order_item;
+use App\Models\OrderItem;
 use App\Models\Payment;
 use App\Models\Shipment;
 
@@ -54,7 +54,7 @@ class DatabaseSeeder extends Seeder
     // Create 10 orders
     $orders = Order::factory(10)->create()->each(function ($order) use ($bouquets, $addOns) {
         // Create 1–3 bouquet items
-        $mainOrderItems = Order_item::factory(rand(1, 3))->create([
+        $mainOrderItems = OrderItem::factory(rand(1, 3))->create([
             'order_id' => $order->id,
             'bouquet_id' => $bouquets->random()->id,
             'add_on_id' => null,
@@ -64,7 +64,7 @@ class DatabaseSeeder extends Seeder
         // Add optional add-ons
         foreach ($mainOrderItems as $item) {
             if (rand(0, 1)) {
-                Order_item::factory(rand(1, 2))->create([
+                OrderItem::factory(rand(1, 2))->create([
                     'order_id' => $order->id,
                     'bouquet_id' => null,
                     'add_on_id' => $addOns->random()->id,
