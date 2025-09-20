@@ -1,38 +1,69 @@
 <?php
 
-use App\Models\Bouquet;
-use App\Models\AddOn;
-use App\Models\Order;
-use App\Models\OrderItem;
-use App\Models\Customer;
-use App\Models\Admin;
-
+use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\BouquetController;
+use App\Http\Controllers\AddOnController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Middleware\AdminMiddleware;
+// -----------------------
+// Public Routes
+// -----------------------
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
-
-Route::get('test', function () {
-    // Load bouquet with related data
-    $bouquet = Bouquet::with([
-        'addOns',         // belongsToMany relationship to AddOn
-        'admin',          // belongsTo relationship to Admin
-        'category',       // belongsTo relationship to Category
-    ])->find(8);
-
-    // Return the bouquet with its relations or a message if not found
-    return $bouquet ?? response()->json(['message' => 'Bouquet not found'], 404);
-});
-
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
+// -----------------------
+// User Authenticated Routes
+// -----------------------
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    // Add more user-protected routes here
 });
+
+// -----------------------
+// Admin Authentication Routes (Public)
+// -----------------------
+
+Route::prefix('admin')->group(function () {
+    Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
+    Route::post('login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
+});
+
+// -----------------------
+// Admin Protected Routes
+// -----------------------
+
+Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->group(function () {
+        
+    Route::get('dashboard', function () {return view('admin/dashboard');})->name('admin.dashboard');
+    Route::post('logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+
+
+    // -------------------------
+    // Bouquet Routes
+    // -------------------------
+    Route::get('bouquets', [BouquetController::class, 'index'])->name('admin.bouquets.index');
+    Route::get('bouquets/create', [BouquetController::class, 'create'])->name('admin.bouquets.create');
+    Route::post('bouquets', [BouquetController::class, 'store'])->name('admin.bouquets.store');
+    Route::get('bouquets/{bouquet}/edit', [BouquetController::class, 'edit'])->name('admin.bouquets.edit');
+    Route::put('bouquets/{bouquet}', [BouquetController::class, 'update'])->name('admin.bouquets.update');
+    Route::delete('bouquets/{bouquet}', [BouquetController::class, 'destroy'])->name('admin.bouquets.destroy');
+
+    // -------------------------
+    // Add-On Routes
+    // -------------------------
+    Route::get('addons', [AddOnController::class, 'index'])->name('admin.addons.index');
+    Route::get('addons/create', [AddOnController::class, 'create'])->name('admin.addons.create');
+    Route::post('addons', [AddOnController::class, 'store'])->name('admin.addons.store');
+    Route::get('addons/{addon}/edit', [AddOnController::class, 'edit'])->name('admin.addons.edit');
+    Route::put('addons/{addon}', [AddOnController::class, 'update'])->name('admin.addons.update');
+    Route::delete('addons/{addon}', [AddOnController::class, 'destroy'])->name('admin.addons.destroy');
+});
+
+
+    
+
+

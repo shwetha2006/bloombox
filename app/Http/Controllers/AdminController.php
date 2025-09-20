@@ -4,7 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Admin; 
+use App\Models\Customer; 
+use App\Models\Bouquet; 
+
+
 use App\Http\Resources\AdminResource;
+
 
 class AdminController extends Controller
 {
@@ -17,6 +22,8 @@ class AdminController extends Controller
         return AdminResource::collection($admins);
     }
 
+    
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -28,6 +35,21 @@ class AdminController extends Controller
         return new AdminResource($admin);
     }
 
+     public function dashboard()
+    {
+        $total_customers = Customer::count();
+        $total_bouquets = Bouquet::count();
+        $total_orders = 102; // replace with actual logic
+        $pending_orders = 24; // replace with actual logic
+
+        // Pass variables to the view
+        return view('admin-dashboard', compact(
+            'total_customers', 
+            'total_bouquets', 
+            'total_orders', 
+            'pending_orders'
+        ));
+    }
     /**
      * Display the specified resource.
      */

@@ -34,3 +34,13 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 
+use App\Http\Controllers\AdminAuthController;
+
+Route::post('/admin/login', [AdminAuthController::class, 'apiLogin']);
+
+Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->middleware('auth:sanctum');
+
+Route::middleware(['auth:sanctum'])->get('/admin/dashboard', function () {
+    return response()->json(['message' => 'Admin dashboard API']);
+});
+

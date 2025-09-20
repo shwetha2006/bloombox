@@ -1,59 +1,100 @@
 <?php
 
+
 namespace App\Http\Controllers;
 
+use App\Models\Bouquet;
+use App\Models\AddOn;
 use Illuminate\Http\Request;
-use App\Models\Bouquet; 
-use App\Http\Resources\BouquetResource;
+use Illuminate\Support\Facades\Storage;
 
 class BouquetController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-     public function index()
+    // List all bouquets
+   public function index()
+{
+    $bouquets = Bouquet::all(); // fetch all bouquets
+    return view('admin.bouquets.index', compact('bouquets'));
+}
+
+
+    // Show form to create a new bouquet
+    public function create()
     {
-        $bouquets = Bouquet::with(['category', 'addOns', 'admin'])->paginate(10);
-        return BouquetResource::collection($bouquets);
+        $addons = AddOn::all(); // to allow attaching add-ons on creation
+        return view('admin.bouquets.create', compact('addons'));
     }
 
+    // Store new bouquet
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $data = $request->validate([
             'name' => 'required|string|max:255',
             'price' => 'required|numeric',
-            'image' => 'nullable|string',
             'description' => 'nullable|string',
-            'admin_id' => 'required|exists:admins,id',
-            'stock_quantity' => 'required|integer',
-            'category_id' => 'required|exists:categories,id',
+            'image' => 'nullable|image|max:2048',
+            'stock_quantity' => 'required|integer|min:0',
+            'addon_ids' => 'nullable|array',
+            'addon_ids.*' => 'exists:add_ons,id',
         ]);
 
-        $bouquet = Bouquet::create($validated);
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('bouquets', 'public');
+        }
 
-        return new BouquetResource($bouquet);
-    }
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $bouquet = Bouquet::create($data);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+        if (!empty($data['addon_ids'])) {
+            $bouquet->addOns()->sync($data['addon_ids']);
+        }
+
+        return redirect()->route('admin.bouquets.index')->with('success', 'Bouquet created successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    // Show edit form
+    public function edit(Bouquet $bouquet)
     {
-        //
+        $addons = AddOn::all();
+        $selectedAddons = $bouquet->addOns()->pluck('id')->toArray();
+        return view('admin.bouquets.edit', compact('bouquet', 'addons', 'selectedAddons'));
+    }
+
+    // Update bouquet
+    public function update(Request $request, Bouquet $bouquet)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|max:2048',
+            'stock_quantity' => 'required|integer|min:0',
+            'addon_ids' => 'nullable|array',
+            'addon_ids.*' => 'exists:add_ons,id',
+        ]);
+
+        if ($request->hasFile('image')) {
+            // delete old image
+            if ($bouquet->image) {
+                Storage::disk('public')->delete($bouquet->image);
+            }
+            $data['image'] = $request->file('image')->store('bouquets', 'public');
+        }
+
+        $bouquet->update($data);
+
+        // Sync add-ons
+        $bouquet->addOns()->sync($data['addon_ids'] ?? []);
+
+        return redirect()->route('admin.bouquets.index')->with('success', 'Bouquet updated successfully');
+    }
+
+    // Delete bouquet
+    public function destroy(Bouquet $bouquet)
+    {
+        if ($bouquet->image) {
+            Storage::disk('public')->delete($bouquet->image);
+        }
+        $bouquet->delete();
+        return redirect()->route('admin.bouquets.index')->with('success', 'Bouquet deleted successfully');
     }
 }

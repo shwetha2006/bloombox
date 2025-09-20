@@ -5,17 +5,10 @@
         </x-slot>
 
         @if (session()->has('error'))
-            <x-validation-errors class="mb-4" />
-            <div class="mb-4 font-medium text-sm text-red-600">
-                {{ session('error') }}
-            </div>
+            <div class="mb-4 font-medium text-sm text-red-600">{{ session('error') }}</div>
         @endif
 
-        @if (session()->has('message'))
-            <div class="mb-4 font-medium text-sm text-green-600">
-                {{ session('message') }}
-            </div>
-        @endif
+        <div class="text-center text-2xl font-bold mb-6">Admin Login</div>
 
         <form wire:submit.prevent="login">
             <div class="mt-4">
@@ -31,8 +24,8 @@
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <x-button class="ml-3">
-                    {{ __('Login') }}
+                <x-button class="ml-3 bg-red-600 hover:bg-red-700">
+                    Admin Login
                 </x-button>
             </div>
         </form>

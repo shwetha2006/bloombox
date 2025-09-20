@@ -1,57 +1,83 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
+use App\Models\AddOn;
 use Illuminate\Http\Request;
-use App\Models\AddOn; 
-use App\Http\Resources\AddOnsResource;
+use Illuminate\Support\Facades\Storage;
 
 class AddOnController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // List all add-ons
     public function index()
     {
-        $addOns = AddOn::with('bouquets')->paginate(10);
-        return AddOnsResource::collection($addOns);
+        $addons = AddOn::all();
+        return view('admin.addons.index', compact('addons'));
     }
 
+    // Show form to create new add-on
+    public function create()
+    {
+        return view('admin.addons.create');
+    }
+
+    // Store new add-on
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $data = $request->validate([
             'name' => 'required|string|max:255',
             'price' => 'required|numeric',
             'description' => 'nullable|string',
-            'image' => 'nullable|string',
-            'stock_quantity' => 'required|integer',
+            'image' => 'nullable|image|max:2048',
+            'stock_quantity' => 'required|integer|min:0',
         ]);
 
-        $addOn = AddOn::create($validated);
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('addons', 'public');
+        }
 
-        return new AddOnsResource($addOn);
-    }
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        AddOn::create($data);
+
+        return redirect()->route('admin.addons.index')->with('success', 'Add-on created successfully');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    // Show edit form
+    public function edit(AddOn $addon)
     {
-        //
+        return view('admin.addons.edit', compact('addon'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    // Update add-on
+    public function update(Request $request, AddOn $addon)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|max:2048',
+            'stock_quantity' => 'required|integer|min:0',
+        ]);
+
+        if ($request->hasFile('image')) {
+            if ($addon->image) {
+                Storage::disk('public')->delete($addon->image);
+            }
+            $data['image'] = $request->file('image')->store('addons', 'public');
+        }
+
+        $addon->update($data);
+
+        return redirect()->route('admin.addons.index')->with('success', 'Add-on updated successfully');
+    }
+
+    // Delete add-on
+    public function destroy(AddOn $addon)
+    {
+        if ($addon->image) {
+            Storage::disk('public')->delete($addon->image);
+        }
+        $addon->delete();
+        return redirect()->route('admin.addons.index')->with('success', 'Add-on deleted successfully');
     }
 }

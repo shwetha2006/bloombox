@@ -42,6 +42,14 @@
                 <x-button class="ms-4">
                     {{ __('Log in') }}
                 </x-button>
+
+                <!-- Admin Login -->
+<a
+    href="{{ route('admin.login') }}"
+    class="inline-block px-5 py-1.5 ml-2 text-white bg-[#1b1b18] hover:bg-[#333] rounded-sm text-sm leading-normal"
+>
+    Admin Login
+</a>
             </div>
         </form>
     </x-authentication-card>
