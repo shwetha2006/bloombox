@@ -16,7 +16,7 @@
         </a>
 
         <!-- Customers -->
-        <a href="#" style="display: flex; align-items: center; padding: 15px 20px; color: #ccc; text-decoration: none; border-radius: 5px; margin-bottom: 10px; transition: all 0.3s ease;" onmouseover="this.style.backgroundColor='#222'; this.style.color='white';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#ccc';">
+        <a href="{{ route('admin.customers.index') }}" style="display: flex; align-items: center; padding: 15px 20px; color: #ccc; text-decoration: none; border-radius: 5px; margin-bottom: 10px; transition: all 0.3s ease;" onmouseover="this.style.backgroundColor='#222'; this.style.color='white';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#ccc';">
             <div style="margin-right: 15px; color: #D4AF37;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -47,6 +47,16 @@
             </div>
             <span style="font-weight: 500;">Bouquets</span>
         </a>
+
+        <a href="{{ route('admin.addons.index') }}" style="display: flex; align-items: center; padding: 15px 20px; color: #ccc; text-decoration: none; border-radius: 5px; margin-bottom: 10px; transition: all 0.3s ease;" onmouseover="this.style.backgroundColor='#222'; this.style.color='white';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#ccc';">
+            <div style="margin-right: 15px; color: #D4AF37;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                </svg>
+            </div>
+            <span style="font-weight: 500;">Add Ons</span>
+        </a>
+
 
     </nav>
 </div>

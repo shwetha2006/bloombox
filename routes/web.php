@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\BouquetController;
 use App\Http\Controllers\AddOnController;
+use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AdminMiddleware;
 // -----------------------
@@ -61,6 +62,14 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->group(func
     Route::get('addons/{addon}/edit', [AddOnController::class, 'edit'])->name('admin.addons.edit');
     Route::put('addons/{addon}', [AddOnController::class, 'update'])->name('admin.addons.update');
     Route::delete('addons/{addon}', [AddOnController::class, 'destroy'])->name('admin.addons.destroy');
+
+    // -------------------------
+    // Customer Routes
+    // -------------------------
+    Route::get('/customers', [CustomerController::class, 'index'])->name('admin.customers.index');
+    Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('admin.customers.show');
+
+
 });
 
 

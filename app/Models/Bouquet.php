@@ -17,6 +17,7 @@ class Bouquet extends Model
         'description',
         'admin_id',
         'stock_quantity',
+        'category_id',
     ];
 
 

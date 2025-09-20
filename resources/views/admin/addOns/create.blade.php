@@ -1,11 +1,11 @@
-{{-- resources/views/admin/bouquets/create.blade.php --}}
+{{-- resources/views/admin/addons/create.blade.php --}}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Bouquet</title>
+    <title>Add Add-On</title>
     @vite('resources/css/app.css') {{-- Include Tailwind --}}
 </head>
 <body class="bg-black text-white font-sans">
@@ -15,32 +15,33 @@
 
         {{-- Header --}}
         <div class="flex justify-between items-center px-6 py-4 border-b-2 border-yellow-400 rounded-t-lg bg-gradient-to-r from-gray-800 to-gray-900">
-            <h2 class="text-yellow-400 text-2xl font-semibold">Add New Bouquet</h2>
+            <h2 class="text-yellow-400 text-2xl font-semibold">Add New Add-On</h2>
         </div>
 
         {{-- Body --}}
         <div class="p-6">
-            <form action="{{ route('admin.bouquets.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+            <form action="{{ route('admin.addons.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+
                 @csrf
 
                 @if ($errors->any())
-    <div class="mb-4 p-4 bg-red-800 text-red-200 rounded">
-        <ul class="list-disc list-inside">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+                    <div class="mb-4 p-4 bg-red-800 text-red-200 rounded">
+                        <ul class="list-disc list-inside">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
-
-                {{-- Bouquet Name --}}
+                {{-- Add-On Name --}}
                 <div class="flex flex-col">
-                    <label for="bouquetName" class="text-yellow-400 font-semibold mb-1">Bouquet Name *</label>
-                    <input type="text" id="bouquetName" name="name" required placeholder="Enter bouquet name"
+                    <label for="addonName" class="text-yellow-400 font-semibold mb-1">Add-On Name *</label>
+                    <input type="text" id="addonName" name="name" required placeholder="Enter add-on name"
                            class="bg-gray-800 border border-gray-600 rounded-md p-3 focus:border-yellow-400 focus:ring focus:ring-yellow-400 focus:ring-opacity-20 outline-none text-white">
                 </div>
 
+                
                 {{-- Description --}}
                 <div class="flex flex-col">
                     <label for="description" class="text-yellow-400 font-semibold mb-1">Description *</label>
@@ -48,10 +49,11 @@
                               class="bg-gray-800 border border-gray-600 rounded-md p-3 focus:border-yellow-400 focus:ring focus:ring-yellow-400 focus:ring-opacity-20 outline-none text-white"></textarea>
                 </div>
 
+
                 {{-- Price --}}
                 <div class="flex flex-col">
                     <label for="price" class="text-yellow-400 font-semibold mb-1">Price (Rs.) *</label>
-                    <input type="number" id="price" name="price" required  
+                    <input type="number" id="price" name="price" required min="0" step="0.01" placeholder="0.00"
                            class="bg-gray-800 border border-gray-600 rounded-md p-3 focus:border-yellow-400 focus:ring focus:ring-yellow-400 focus:ring-opacity-20 outline-none text-white">
                 </div>
 
@@ -64,41 +66,15 @@
 
                 {{-- Image Upload --}}
                 <div class="flex flex-col">
-                    <label for="image" class="text-yellow-400 font-semibold mb-1">Bouquet Image</label>
+                    <label for="image" class="text-yellow-400 font-semibold mb-1">Add-On Image</label>
                     <input type="file" id="image" name="image" accept="image/*" class="text-white">
                 </div>
 
-                {{-- Addons --}}
-                <div class="flex flex-col">
-                    <label for="addons" class="text-yellow-400 font-semibold mb-1">Select Addons</label>
-                    <select id="addons" name="addons[]" multiple
-                            class="bg-gray-800 border border-gray-600 rounded-md p-3 text-white h-32 focus:border-yellow-400 focus:ring focus:ring-yellow-400 focus:ring-opacity-20 outline-none">
-                        @forelse($addons as $addon)
-                            <option value="{{ $addon->id }}">{{ $addon->name }}</option>
-                        @empty
-                            <option disabled>No add-ons available</option>
-                        @endforelse
-                    </select>
-                    <span class="text-gray-400 text-sm mt-1">Hold Ctrl/Cmd to select multiple addons</span>
-                </div>
-
-                {{-- Categories --}}
-                <div class="flex flex-col">
-    <label for="category" class="text-yellow-400 font-semibold mb-1">Select Category *</label>
-    <select id="category" name="category_id" required
-            class="bg-gray-800 border border-gray-600 rounded-md p-3 text-white focus:border-yellow-400 focus:ring focus:ring-yellow-400 focus:ring-opacity-20 outline-none">
-        @forelse($categories as $category)
-            <option value="{{ $category->id }}">{{ $category->name }}</option>
-        @empty
-            <option disabled>No categories available</option>
-        @endforelse
-    </select>
-</div>
 
                 {{-- Buttons --}}
                 <div class="flex justify-end gap-4 pt-4 border-t border-gray-600">
-                    <a href="{{ route('admin.bouquets.index') }}" class="px-6 py-2 bg-gray-700 rounded-md hover:bg-gray-600 transition">Cancel</a>
-                    <button type="submit" class="px-6 py-2 bg-gradient-to-r from-yellow-400 to-yellow-600 text-black rounded-md hover:scale-105 transition">Add Bouquet</button>
+                    <a href="{{ route('admin.addons.index') }}" class="px-6 py-2 bg-gray-700 rounded-md hover:bg-gray-600 transition">Cancel</a>
+                    <button type="submit" class="px-6 py-2 bg-gradient-to-r from-yellow-400 to-yellow-600 text-black rounded-md hover:scale-105 transition">Add Add-On</button>
                 </div>
             </form>
         </div>

@@ -1,29 +1,29 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use App\Models\Bouquet;
 use App\Models\AddOn;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class BouquetController extends Controller
 {
     // List all bouquets
-   public function index()
-{
-    $bouquets = Bouquet::all(); // fetch all bouquets
-    return view('admin.bouquets.index', compact('bouquets'));
-}
-
-
-    // Show form to create a new bouquet
-    public function create()
+    public function index()
     {
-        $addons = AddOn::all(); // to allow attaching add-ons on creation
-        return view('admin.bouquets.create', compact('addons'));
+        $bouquets = Bouquet::all();
+        return view('admin.bouquets.index', compact('bouquets'));
     }
+
+    // Show create form
+    public function create()
+{
+    $addons = AddOn::all();       // fetch all add-ons
+    $categories = Category::all(); // fetch all categories
+    return view('admin.bouquets.create', compact('addons', 'categories'));
+}
 
     // Store new bouquet
     public function store(Request $request)
@@ -32,10 +32,11 @@ class BouquetController extends Controller
             'name' => 'required|string|max:255',
             'price' => 'required|numeric',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|max:2048',
             'stock_quantity' => 'required|integer|min:0',
-            'addon_ids' => 'nullable|array',
-            'addon_ids.*' => 'exists:add_ons,id',
+            'image' => 'nullable|image|max:2048',
+            'category_id' => 'required|exists:categories,id',
+            'addons' => 'nullable|array',
+            'addons.*' => 'exists:add_ons,id'
         ]);
 
         if ($request->hasFile('image')) {
@@ -44,11 +45,11 @@ class BouquetController extends Controller
 
         $bouquet = Bouquet::create($data);
 
-        if (!empty($data['addon_ids'])) {
-            $bouquet->addOns()->sync($data['addon_ids']);
+        if (!empty($data['addons'])) {
+            $bouquet->addOns()->sync($data['addons']);
         }
 
-        return redirect()->route('admin.bouquets.index')->with('success', 'Bouquet created successfully');
+        return redirect()->route('admin.bouquets.index')->with('success', 'Bouquet created successfully!');
     }
 
     // Show edit form
@@ -66,14 +67,13 @@ class BouquetController extends Controller
             'name' => 'required|string|max:255',
             'price' => 'required|numeric',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|max:2048',
             'stock_quantity' => 'required|integer|min:0',
-            'addon_ids' => 'nullable|array',
-            'addon_ids.*' => 'exists:add_ons,id',
+            'image' => 'nullable|image|max:2048',
+            'addons' => 'nullable|array',
+            'addons.*' => 'exists:add_ons,id'
         ]);
 
         if ($request->hasFile('image')) {
-            // delete old image
             if ($bouquet->image) {
                 Storage::disk('public')->delete($bouquet->image);
             }
@@ -81,11 +81,9 @@ class BouquetController extends Controller
         }
 
         $bouquet->update($data);
+        $bouquet->addOns()->sync($data['addons'] ?? []);
 
-        // Sync add-ons
-        $bouquet->addOns()->sync($data['addon_ids'] ?? []);
-
-        return redirect()->route('admin.bouquets.index')->with('success', 'Bouquet updated successfully');
+        return redirect()->route('admin.bouquets.index')->with('success', 'Bouquet updated successfully!');
     }
 
     // Delete bouquet
@@ -94,7 +92,8 @@ class BouquetController extends Controller
         if ($bouquet->image) {
             Storage::disk('public')->delete($bouquet->image);
         }
+
         $bouquet->delete();
-        return redirect()->route('admin.bouquets.index')->with('success', 'Bouquet deleted successfully');
+        return redirect()->route('admin.bouquets.index')->with('success', 'Bouquet deleted successfully!');
     }
 }

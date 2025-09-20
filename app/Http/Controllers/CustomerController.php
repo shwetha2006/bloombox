@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Customer; 
+use App\Models\User; 
 use App\Http\Resources\CustomerResource;
 
 class CustomerController extends Controller
@@ -11,12 +12,17 @@ class CustomerController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // public function index()
+    // {
+    //     $customers = Customer::with(['user', 'orders'])->paginate(10);
+    //     return CustomerResource::collection($customers);
+    // }
+
     public function index()
     {
-        $customers = Customer::with(['user', 'orders'])->paginate(10);
-        return CustomerResource::collection($customers);
+        $customers = User::all(); // fetch all customers
+        return view('admin.customers.index', compact('customers'));
     }
-
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -34,9 +40,9 @@ class CustomerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $customer)
     {
-        //
+        return view('admin.customers.show', compact('customer'));
     }
 
     /**
