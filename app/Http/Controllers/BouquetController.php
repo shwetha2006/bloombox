@@ -7,93 +7,133 @@ use App\Models\AddOn;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\BouquetResource;
+
+
 
 class BouquetController extends Controller
 {
-    // List all bouquets
-    public function index()
+    // Show create form (Web)
+    public function createForm()
     {
-        $bouquets = Bouquet::all();
+        $addons = AddOn::all();
+        $categories = Category::all();
+        return view('admin.bouquets.create', compact('addons', 'categories'));
+    }
+
+    // List bouquets (Web + API)
+    public function index(Request $request)
+    {
+        $bouquets = Bouquet::with(['addons', 'category'])->get();
+
+        if ($request->is('api/*')) {
+            return response()->json(['bouquets' => $bouquets]);
+        }
+
         return view('admin.bouquets.index', compact('bouquets'));
     }
 
-    // Show create form
-    public function create()
-{
-    $addons = AddOn::all();       // fetch all add-ons
-    $categories = Category::all(); // fetch all categories
-    return view('admin.bouquets.create', compact('addons', 'categories'));
-}
-
-    // Store new bouquet
+    // Store new bouquet (Web + API)
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric',
-            'description' => 'nullable|string',
+        $validated = $request->validate([
+            'name'           => 'required|string|max:255',
+            'price'          => 'required|numeric',
+            'description'    => 'nullable|string',
             'stock_quantity' => 'required|integer|min:0',
-            'image' => 'nullable|image|max:2048',
-            'category_id' => 'required|exists:categories,id',
-            'addons' => 'nullable|array',
-            'addons.*' => 'exists:add_ons,id'
+            'image'          => 'nullable|image|max:2048',
+            'category_id'    => 'required|exists:categories,id',
+            'addons'         => 'nullable|array',
+            'addons.*'       => 'exists:add_ons,id',
         ]);
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('bouquets', 'public');
+            $validated['image'] = $request->file('image')->store('bouquets', 'public');
         }
 
-        $bouquet = Bouquet::create($data);
+        $bouquet = Bouquet::create($validated);
 
-        if (!empty($data['addons'])) {
-            $bouquet->addOns()->sync($data['addons']);
+        if (!empty($validated['addons'])) {
+            $bouquet->addons()->sync($validated['addons']);
+        }
+
+        if ($request->is('api/*')) {
+            return response()->json([
+                'message' => 'Bouquet created successfully',
+                'bouquet' => $bouquet->load('addons', 'category')
+            ], 201);
         }
 
         return redirect()->route('admin.bouquets.index')->with('success', 'Bouquet created successfully!');
     }
 
+
+
     // Show edit form
-    public function edit(Bouquet $bouquet)
-    {
-        $addons = AddOn::all();
-        $selectedAddons = $bouquet->addOns()->pluck('id')->toArray();
-        return view('admin.bouquets.edit', compact('bouquet', 'addons', 'selectedAddons'));
-    }
+public function edit(Bouquet $bouquet)
+{
+    $bouquet->load('addOns'); // ensure addOns relationship is loaded
 
-    // Update bouquet
-    public function update(Request $request, Bouquet $bouquet)
-    {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric',
-            'description' => 'nullable|string',
-            'stock_quantity' => 'required|integer|min:0',
-            'image' => 'nullable|image|max:2048',
-            'addons' => 'nullable|array',
-            'addons.*' => 'exists:add_ons,id'
-        ]);
+    $categories = Category::all();
+    $allAddOns = AddOn::all();
+    $selectedAddOns = $bouquet->addOns->pluck('id')->toArray();
 
-        if ($request->hasFile('image')) {
-            if ($bouquet->image) {
-                Storage::disk('public')->delete($bouquet->image);
-            }
-            $data['image'] = $request->file('image')->store('bouquets', 'public');
-        }
+    return view('admin.bouquets.edit', compact('bouquet', 'categories', 'allAddOns', 'selectedAddOns'));
+}
 
-        $bouquet->update($data);
-        $bouquet->addOns()->sync($data['addons'] ?? []);
 
-        return redirect()->route('admin.bouquets.index')->with('success', 'Bouquet updated successfully!');
-    }
+// Handle update (API + Web)
+public function update(Request $request, Bouquet $bouquet)
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'price' => 'required|numeric',
+        'description' => 'nullable|string',
+        'stock_quantity' => 'required|integer|min:0',
+        'image' => 'nullable|image|max:2048',
+    ]);
 
-    // Delete bouquet
-    public function destroy(Bouquet $bouquet)
-    {
+    // Handle new image upload
+    if ($request->hasFile('image')) {
+        // Delete old image if exists
         if ($bouquet->image) {
             Storage::disk('public')->delete($bouquet->image);
         }
-
-        $bouquet->delete();
-        return redirect()->route('admin.bouquets.index')->with('success', 'Bouquet deleted successfully!');
+        $validated['image'] = $request->file('image')->store('bouquets', 'public');
     }
+
+    $bouquet->update($validated);
+
+    if ($request->is('api/*')) {
+        return response()->json([
+            'message' => 'Bouquet updated successfully',
+            'bouquet' => new BouquetResource($bouquet),
+        ]);
+    }
+
+    return redirect()->route('admin.bouquets.index')
+                     ->with('success', 'Bouquet updated successfully!');
+}
+
+    public function destroy(Bouquet $bouquet, Request $request)
+{
+    // Delete the bouquet image if it exists
+    if ($bouquet->image) {
+        Storage::disk('public')->delete($bouquet->image);
+    }
+
+    $bouquet->delete();
+
+    // Return JSON if API request
+    if ($request->is('api/*')) {
+        return response()->json(['message' => 'Bouquet deleted successfully']);
+    }
+
+    // Otherwise, redirect for web requests
+    return redirect()->route('admin.bouquets.index')
+                     ->with('success', 'Bouquet deleted successfully!');
+}
+
+
+
 }

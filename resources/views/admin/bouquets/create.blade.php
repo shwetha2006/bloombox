@@ -1,107 +1,57 @@
-{{-- resources/views/admin/bouquets/create.blade.php --}}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Bouquet</title>
-    @vite('resources/css/app.css') {{-- Include Tailwind --}}
+    @vite('resources/css/app.css')
 </head>
 <body class="bg-black text-white font-sans">
 
+@vite('resources/js/bouquet.js')
+
 <div class="min-h-screen flex items-center justify-center p-6">
-    <div class="bg-gray-900 border-2 border-yellow-400 rounded-lg shadow-xl w-full max-w-lg overflow-y-auto">
+    <div class="bg-gray-900 border-2 border-yellow-400 rounded-lg shadow-xl w-full max-w-lg overflow-y-auto p-6">
 
-        {{-- Header --}}
-        <div class="flex justify-between items-center px-6 py-4 border-b-2 border-yellow-400 rounded-t-lg bg-gradient-to-r from-gray-800 to-gray-900">
-            <h2 class="text-yellow-400 text-2xl font-semibold">Add New Bouquet</h2>
-        </div>
+        <h2 class="text-yellow-400 text-2xl font-semibold mb-4">Add New Bouquet</h2>
 
-        {{-- Body --}}
-        <div class="p-6">
-            <form action="{{ route('admin.bouquets.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
-                @csrf
+        <form id="bouquet-form" enctype="multipart/form-data" novalidate>
+            @csrf
 
-                @if ($errors->any())
-    <div class="mb-4 p-4 bg-red-800 text-red-200 rounded">
-        <ul class="list-disc list-inside">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+            <label class="text-yellow-400 font-semibold">Bouquet Name *</label>
+            <input type="text" name="name" class="bg-gray-800 p-3 rounded-md w-full mb-3" required>
 
+            <label class="text-yellow-400 font-semibold">Description</label>
+            <textarea name="description" class="bg-gray-800 p-3 rounded-md w-full mb-3"></textarea>
 
-                {{-- Bouquet Name --}}
-                <div class="flex flex-col">
-                    <label for="bouquetName" class="text-yellow-400 font-semibold mb-1">Bouquet Name *</label>
-                    <input type="text" id="bouquetName" name="name" required placeholder="Enter bouquet name"
-                           class="bg-gray-800 border border-gray-600 rounded-md p-3 focus:border-yellow-400 focus:ring focus:ring-yellow-400 focus:ring-opacity-20 outline-none text-white">
-                </div>
+            <label class="text-yellow-400 font-semibold">Price *</label>
+            <input type="number" name="price" class="bg-gray-800 p-3 rounded-md w-full mb-3" required>
 
-                {{-- Description --}}
-                <div class="flex flex-col">
-                    <label for="description" class="text-yellow-400 font-semibold mb-1">Description *</label>
-                    <textarea id="description" name="description" required placeholder="Enter bouquet description" rows="4"
-                              class="bg-gray-800 border border-gray-600 rounded-md p-3 focus:border-yellow-400 focus:ring focus:ring-yellow-400 focus:ring-opacity-20 outline-none text-white"></textarea>
-                </div>
+            <label class="text-yellow-400 font-semibold">Stock Quantity *</label>
+            <input type="number" name="stock_quantity" min="0" class="bg-gray-800 p-3 rounded-md w-full mb-3" required>
 
-                {{-- Price --}}
-                <div class="flex flex-col">
-                    <label for="price" class="text-yellow-400 font-semibold mb-1">Price (Rs.) *</label>
-                    <input type="number" id="price" name="price" required  
-                           class="bg-gray-800 border border-gray-600 rounded-md p-3 focus:border-yellow-400 focus:ring focus:ring-yellow-400 focus:ring-opacity-20 outline-none text-white">
-                </div>
+            <label class="text-yellow-400 font-semibold">Image</label>
+            <input type="file" name="image" class="bg-gray-800 p-2 rounded-md w-full mb-3">
 
-                {{-- Stock quantity --}}
-                <div class="flex flex-col">
-                    <label for="stock_quantity" class="text-yellow-400 font-semibold mb-1">Stock quantity *</label>
-                    <input type="number" id="stock_quantity" name="stock_quantity" required min="0" step="1" placeholder="0.00"
-                           class="bg-gray-800 border border-gray-600 rounded-md p-3 focus:border-yellow-400 focus:ring focus:ring-yellow-400 focus:ring-opacity-20 outline-none text-white">
-                </div>
+            <label class="text-yellow-400 font-semibold">Category *</label>
+            <select name="category_id" class="bg-gray-800 p-3 rounded-md w-full mb-3" required>
+                @foreach($categories as $category)
+                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                @endforeach
+            </select>
 
-                {{-- Image Upload --}}
-                <div class="flex flex-col">
-                    <label for="image" class="text-yellow-400 font-semibold mb-1">Bouquet Image</label>
-                    <input type="file" id="image" name="image" accept="image/*" class="text-white">
-                </div>
+            <label class="text-yellow-400 font-semibold">Select Add-ons</label>
+            <select name="addons[]" multiple class="bg-gray-800 p-3 rounded-md w-full mb-3">
+                @foreach($addons as $addon)
+                    <option value="{{ $addon->id }}">{{ $addon->name }}</option>
+                @endforeach
+            </select>
 
-                {{-- Addons --}}
-                <div class="flex flex-col">
-                    <label for="addons" class="text-yellow-400 font-semibold mb-1">Select Addons</label>
-                    <select id="addons" name="addons[]" multiple
-                            class="bg-gray-800 border border-gray-600 rounded-md p-3 text-white h-32 focus:border-yellow-400 focus:ring focus:ring-yellow-400 focus:ring-opacity-20 outline-none">
-                        @forelse($addons as $addon)
-                            <option value="{{ $addon->id }}">{{ $addon->name }}</option>
-                        @empty
-                            <option disabled>No add-ons available</option>
-                        @endforelse
-                    </select>
-                    <span class="text-gray-400 text-sm mt-1">Hold Ctrl/Cmd to select multiple addons</span>
-                </div>
-
-                {{-- Categories --}}
-                <div class="flex flex-col">
-    <label for="category" class="text-yellow-400 font-semibold mb-1">Select Category *</label>
-    <select id="category" name="category_id" required
-            class="bg-gray-800 border border-gray-600 rounded-md p-3 text-white focus:border-yellow-400 focus:ring focus:ring-yellow-400 focus:ring-opacity-20 outline-none">
-        @forelse($categories as $category)
-            <option value="{{ $category->id }}">{{ $category->name }}</option>
-        @empty
-            <option disabled>No categories available</option>
-        @endforelse
-    </select>
-</div>
-
-                {{-- Buttons --}}
-                <div class="flex justify-end gap-4 pt-4 border-t border-gray-600">
-                    <a href="{{ route('admin.bouquets.index') }}" class="px-6 py-2 bg-gray-700 rounded-md hover:bg-gray-600 transition">Cancel</a>
-                    <button type="submit" class="px-6 py-2 bg-gradient-to-r from-yellow-400 to-yellow-600 text-black rounded-md hover:scale-105 transition">Add Bouquet</button>
-                </div>
-            </form>
-        </div>
+            <div class="flex justify-end gap-4 mt-4">
+                <a href="{{ route('admin.bouquets.index') }}" class="px-6 py-2 bg-gray-700 rounded-md hover:bg-gray-600">Cancel</a>
+                <button type="submit" class="px-6 py-2 bg-gradient-to-r from-yellow-400 to-yellow-600 text-black rounded-md">Save</button>
+            </div>
+        </form>
     </div>
 </div>
 

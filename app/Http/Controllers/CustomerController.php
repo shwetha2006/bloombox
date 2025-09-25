@@ -19,10 +19,12 @@ class CustomerController extends Controller
     // }
 
     public function index()
-    {
-        $customers = User::all(); // fetch all customers
-        return view('admin.customers.index', compact('customers'));
-    }
+{
+    $customers = Customer::with('user')->get();
+    return view('admin.customers.index', compact('customers'));
+}
+
+    
     public function store(Request $request)
     {
         $validated = $request->validate([

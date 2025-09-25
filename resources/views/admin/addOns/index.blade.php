@@ -1,29 +1,4 @@
-{{-- resources/views/admin/addons/index.blade.php --}}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add-Ons</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/output.css') }}">
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-</head>
-<body style="margin: 0; padding: 0; font-family: 'Arial', sans-serif; background-color: black; color: white;">
-    <div style="display: flex; min-height: 100vh; flex-direction: column;">
-        <!-- Header -->
-        <div style="background: linear-gradient(to right, #000000, #111111, #000000); padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222;">
-            <div style="color: #D4AF37; font-size: 24px; font-weight: bold;">BLOOMBOX ADMIN</div>
-            <div style="display: flex; align-items: center;">
-                <div style="margin-right: 15px;">Welcome, Admin</div>
-                <a href="#">
-                    <button style="background-color: transparent; border: 1px solid #444; color: white; padding: 8px 15px; border-radius: 4px; cursor: pointer;">Logout</button>
-                </a>
-            </div> 
-        </div>
+@include('admin.header')
 
         <div style="display: flex; flex: 1;">
             @include('layouts.admin_nav')
@@ -50,6 +25,8 @@
                                 <th style="border: 1px solid #404040; padding: 1rem; text-align: left; color: #D4AF37; font-weight: 600; font-size: 0.95rem;">Add-On Name</th>
                                 <th style="border: 1px solid #404040; padding: 1rem; text-align: center; color: #D4AF37; font-weight: 600; font-size: 0.95rem;">Image</th>
                                 <th style="border: 1px solid #404040; padding: 1rem; text-align: left; color: #D4AF37; font-weight: 600; font-size: 0.95rem;">Description</th>
+                                <th style="border: 1px solid #404040; padding: 1rem; text-align: left; color: #D4AF37; font-weight: 600; font-size: 0.95rem;">Stock quantity</th>
+
                                 <th style="border: 1px solid #404040; padding: 1rem; text-align: left; color: #D4AF37; font-weight: 600; font-size: 0.95rem;">Price</th>
                                 <th style="border: 1px solid #404040; padding: 1rem; text-align: center; color: #D4AF37; font-weight: 600; font-size: 0.95rem;">Actions</th>
                             </tr>
@@ -67,8 +44,8 @@
                                     <!-- Image Column -->
                                     <td style="border: 1px solid #404040; padding: 0.875rem; text-align: center;">
                                         @if (!empty($addon->image))
-                                            <img src="{{ asset('uploads/' . $addon->image) }}" 
-                                                 alt="{{ $addon->name }}"
+                                            <img src="{{ asset('storage/' . $addon->image) }}" alt="{{ $addon->name }}"
+
                                                  style="height: 64px; width: 64px; object-fit: cover; border-radius: 8px; border: 2px solid #D4AF37; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
                                         @else
                                             <div style="height: 64px; width: 64px; background-color: #333333; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: 2px solid #555555; color: #888888; font-size: 0.75rem; text-align: center; margin: 0 auto;">
@@ -78,6 +55,9 @@
                                     </td>
 
                                     <td style="border: 1px solid #404040; padding: 0.875rem; color: #ffffff; font-size: 0.9rem;">{{ $addon->description }}</td>
+
+                                    <td style="border: 1px solid #404040; padding: 0.875rem; color: #ffffff; font-size: 0.9rem;">{{ $addon->stock_quantity }}</td>
+
 
                                     <td style="border: 1px solid #404040; padding: 0.875rem; color: #D4AF37; font-size: 0.9rem;">Rs. {{ number_format($addon->price, 2) }}</td>
                                     

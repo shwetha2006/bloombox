@@ -11,7 +11,6 @@
         <div style="background: linear-gradient(to right, #000000, #111111, #000000); padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222;">
             <div style="color: #D4AF37; font-size: 24px; font-weight: bold;">BLOOMBOX ADMIN</div>
             <div style="display: flex; align-items: center;">
-                <div style="margin-right: 15px;">Welcome, {{ Auth::user()->name ?? 'Admin' }}</div>
                 <form method="POST" action="{{ route('admin.logout') }}" style="display: inline;">
                     @csrf
                     <button type="submit" style="background-color: transparent; border: 1px solid #444; color: white; padding: 8px 15px; border-radius: 4px; cursor: pointer;">
@@ -20,6 +19,7 @@
                 </form>
             </div> 
         </div>
+        
         
         <!-- Main Content -->
         <div style="display: flex; flex: 1;">
@@ -84,5 +84,44 @@
             </div>
         </div>
     </div>
+
+    @if(session('api_token'))
+<script>
+    localStorage.setItem('api_token', '{{ session('api_token') }}');
+    console.log('Admin API token saved to localStorage:', localStorage.getItem('api_token'));
+</script>
+@endif
+
+
+<script>
+document.getElementById('admin-logout-btn').addEventListener('click', async () => {
+    const token = localStorage.getItem('api_token'); // get token from localStorage
+    if (!token) {
+        window.location.href = '/admin/login'; // fallback
+        return;
+    }
+
+    try {
+        // Send POST request to API logout
+        await axios.post('/api/admin/logout', {}, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        // Remove token from localStorage
+        localStorage.removeItem('api_token');
+
+        // Redirect to admin login
+        window.location.href = '/admin/login';
+    } catch (error) {
+        console.error('Logout failed', error);
+        alert('Logout failed. Try again.');
+    }
+});
+</script>
+
+
+
 </body>
 </html>

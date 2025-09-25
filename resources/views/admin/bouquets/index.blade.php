@@ -1,27 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bouquets</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/output.css') }}">
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-</head>
-<body style="margin: 0; padding: 0; font-family: 'Arial', sans-serif; background-color: black; color: white;">
-    <div style="display: flex; min-height: 100vh; flex-direction: column;">
-        <!-- Header -->
-        <div style="background: linear-gradient(to right, #000000, #111111, #000000); padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222;">
-            <div style="color: #D4AF37; font-size: 24px; font-weight: bold;">BLOOMBOX ADMIN</div>
-            <div style="display: flex; align-items: center;">
-                <div style="margin-right: 15px;">Welcome, Admin</div>
-                <a href="#">
-                    <button style="background-color: transparent; border: 1px solid #444; color: white; padding: 8px 15px; border-radius: 4px; cursor: pointer;">Logout</button>
-                </a>
-            </div> 
-        </div>
+@include('admin.header')
 
         <div style="display: flex; flex: 1;">
             @include('layouts.admin_nav')
@@ -48,6 +25,8 @@
                                 <th style="border: 1px solid #404040; padding: 1rem; text-align: left; color: #D4AF37; font-weight: 600; font-size: 0.95rem; letter-spacing: 0.5px;">Image</th>
                                 <th style="border: 1px solid #404040; padding: 1rem; text-align: left; color: #D4AF37; font-weight: 600; font-size: 0.95rem; letter-spacing: 0.5px;">Bouquet Name</th>
                                 <th style="border: 1px solid #404040; padding: 1rem; text-align: left; color: #D4AF37; font-weight: 600; font-size: 0.95rem; letter-spacing: 0.5px;">Description</th>
+                                <th style="border: 1px solid #404040; padding: 1rem; text-align: left; color: #D4AF37; font-weight: 600; font-size: 0.95rem; letter-spacing: 0.5px;">Stock quantity</th>
+
                                 <th style="border: 1px solid #404040; padding: 1rem; text-align: left; color: #D4AF37; font-weight: 600; font-size: 0.95rem; letter-spacing: 0.5px;">Price</th>
                                 <th style="border: 1px solid #404040; padding: 1rem; text-align: center; color: #D4AF37; font-weight: 600; font-size: 0.95rem; letter-spacing: 0.5px;">Actions</th>
                             </tr>
@@ -66,7 +45,7 @@
                                     <!-- Image -->
                                     <td style="border: 1px solid #404040; padding: 0.875rem; text-align: center;">
                                         @if (!empty($b->image))
-                                            <img src="{{ asset('uploads/' . $b->image) }}" 
+                                            <img src="{{ asset('storage/' . $b->image) }}" 
                                                  alt="{{ $b->name }}"
                                                  style="height: 64px; width: 64px; object-fit: cover; border-radius: 8px; border: 2px solid #D4AF37; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
                                         @else
@@ -87,6 +66,13 @@
                                             {{ $b->description }}
                                         </div>
                                     </td>
+
+                                    <!-- stock quantity -->
+                                    <td style="border: 1px solid #404040; padding: 0.875rem; color: #cccccc; font-size: 0.85rem; max-width: 250px;">
+                                        <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ $b->stock_quantity }}">
+                                            {{ $b->stock_quantity }}
+                                        </div>
+                                    </td>
                                     
                                     <!-- Price -->
                                     <td style="border: 1px solid #404040; padding: 0.875rem; color: #D4AF37; font-size: 0.95rem; font-weight: 600;">
@@ -97,7 +83,7 @@
                                     <td style="border: 1px solid #404040; padding: 0.875rem; text-align: center;">
                                         <div style="display: flex; justify-content: center; align-items: center; gap: 12px;">
                                             <!-- Edit Button -->
-                                            <a href="#" 
+                                            <a href="{{ route('admin.bouquets.edit', $b->id) }}" 
                                                title="Edit Bouquet"
                                                style="background-color: #2d5a2d; color: #ffffff; padding: 8px 12px; border-radius: 4px; text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 4px;"
                                                onmouseover="this.style.backgroundColor='#3d7a3d'; this.style.transform='translateY(-1px)'"
@@ -106,7 +92,7 @@
                                             </a>
                                             
                                             <!-- Delete Button -->
-                                            <form action="#" method="POST" style="display: inline;" 
+                                            <form action="{{ route('admin.bouquets.destroy', $b->id) }}" method="POST" style="display: inline;" 
                                                   onsubmit="return confirm('Are you sure you want to delete this bouquet? This action cannot be undone.')">
                                                 @csrf
                                                 @method('DELETE')

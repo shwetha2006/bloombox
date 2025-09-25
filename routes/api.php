@@ -1,46 +1,34 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{
-    AdminController,
-    BouquetController,
-    CustomerController,
-    CategoryController,
-    OrderController,
-    AddOnController,
-    PaymentController,
-    ShipmentController,
-    OrderItemController,
-    UserController,
-    AuthController
-};
-
-Route::middleware('auth:sanctum')->group(function () {
-
-    Route::apiResource('users', UserController::class)->only(['index','show']);
-    Route::apiResource('admins', AdminController::class);
-    Route::apiResource('customers', CustomerController::class);
-    Route::apiResource('categories', CategoryController::class);
-    Route::apiResource('add-ons', AddOnController::class);
-    Route::apiResource('orders', OrderController::class);
-    Route::apiResource('order-items', OrderItemController::class);
-    Route::apiResource('payments', PaymentController::class);
-    Route::apiResource('shipments', ShipmentController::class);
-
-    Route::apiResource('bouquets', BouquetController::class);
-});
-
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
-
-
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\AddOnController;
+use App\Http\Controllers\BouquetController;
 
+// --------------------
+// Admin login / logout
+// --------------------
 Route::post('/admin/login', [AdminAuthController::class, 'apiLogin']);
 
-Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->middleware('auth:sanctum');
+// --------------------
+// Protected routes with admin-only token auth
+// --------------------
 
-Route::middleware(['auth:sanctum'])->get('/admin/dashboard', function () {
-    return response()->json(['message' => 'Admin dashboard API']);
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('addons', [AddOnController::class, 'index'])->name('addons.index');
+    Route::post('addons', [AddOnController::class, 'store'])->name('addons.store');
+    Route::get('addons/{addon}', [AddOnController::class, 'show'])->name('addons.show');
+    Route::put('addons/{addon}', [AddOnController::class, 'update'])->name('addons.update'); // Update add-on
+    Route::delete('addons/{addon}', [AddOnController::class, 'destroy'])->name('addons.destroy');
+
+    Route::get('bouquets', [BouquetController::class, 'index'])->name('bouquets.index');
+    Route::post('bouquets', [BouquetController::class, 'store'])->name('bouquets.store');
+    Route::get('bouquets/{bouquet}', [BouquetController::class, 'show'])->name('bouquets.show'); // <-- add this
+    Route::delete('bouquets/{bouquet}', [BouquetController::class, 'destroy'])->name('bouquets.destroy'); // <-- add this
+    Route::put('bouquets/{bouquet}', [BouquetController::class, 'update'])->name('bouquets.update');
+
+    Route::post('/admin/logout', [AdminAuthController::class, 'apiLogout'])->name('admin.apiLogout');
+
+
+
 });
-

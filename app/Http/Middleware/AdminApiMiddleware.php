@@ -5,11 +5,11 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class AdminMiddleware
+class AdminApiMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        $user = $request->user(); // Comes from auth:sanctum
+        $user = $request->user(); // fetched via auth:sanctum
 
         if ($user && $user->role === 'admin') {
             return $next($request);
@@ -18,3 +18,5 @@ class AdminMiddleware
         return response()->json(['message' => 'Unauthorized. Admins only.'], 403);
     }
 }
+
+

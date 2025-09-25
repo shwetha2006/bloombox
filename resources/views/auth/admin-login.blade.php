@@ -45,4 +45,10 @@
             </div>
         </form>
     </x-authentication-card>
+    @if(session('api_token'))
+<script>
+    localStorage.setItem('api_token', '{{ session('api_token') }}');
+</script>
+@endif
+
 </x-guest-layout>
