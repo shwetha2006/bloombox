@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,4 +10,4 @@
     @livewire('test-component') <!-- include the component -->
     @livewireScripts
 </body>
-</html>
+</html> -->

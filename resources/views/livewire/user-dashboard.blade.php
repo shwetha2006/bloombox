@@ -1,4 +1,4 @@
-<div>
+<!-- <div>
     <h1>User Dashboard</h1>
     <table>
         <thead>
@@ -16,4 +16,4 @@
             @endforeach
         </tbody>
     </table>
-</div>
+</div> -->

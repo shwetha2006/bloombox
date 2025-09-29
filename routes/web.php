@@ -74,7 +74,11 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->group(func
 
 });
 
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/bouquets', [BouquetController::class, 'customerIndex'])->name('customer.bouquets-index');
+    Route::get('/bouquet/{bouquet}', [BouquetController::class, 'show'])->name('customer.bouquet-show');
 
+});
     
 
 

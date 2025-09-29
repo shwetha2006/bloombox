@@ -33,6 +33,27 @@ class BouquetController extends Controller
         return view('admin.bouquets.index', compact('bouquets'));
     }
 
+    // Customer view + API
+public function customerIndex(Request $request)
+{
+    $minPrice = $request->input('minPrice', 0);
+    $maxPrice = $request->input('maxPrice', 20000);
+
+    $bouquets = Bouquet::with(['addOns', 'category'])
+                        ->whereBetween('price', [$minPrice, $maxPrice])
+                        ->get();
+
+    return view('customer.bouquet-index', compact('bouquets'));
+}
+
+public function show(Bouquet $bouquet)
+{
+    // Load related add-ons
+    $bouquet->load('addOns');
+
+    return view('customer.bouquet-show', compact('bouquet'));
+}
+
     // Store new bouquet (Web + API)
     public function store(Request $request)
     {

@@ -91,7 +91,7 @@ class AdminAuthController extends Controller
     $request->session()->invalidate();
     $request->session()->regenerateToken();
 
-    return redirect('/admin/login'); // redirect to admin login page
+    return redirect('/login'); 
 }
 
 }

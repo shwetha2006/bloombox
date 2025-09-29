@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AddOnController;
 use App\Http\Controllers\BouquetController;
 
@@ -9,6 +10,8 @@ use App\Http\Controllers\BouquetController;
 // Admin login / logout
 // --------------------
 Route::post('/admin/login', [AdminAuthController::class, 'apiLogin']);
+Route::post('/login', [AuthController::class, 'login']);
+
 
 // --------------------
 // Protected routes with admin-only token auth
@@ -28,6 +31,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('bouquets/{bouquet}', [BouquetController::class, 'update'])->name('bouquets.update');
 
     Route::post('/admin/logout', [AdminAuthController::class, 'apiLogout'])->name('admin.apiLogout');
+
+    Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::get('/bouquets', [BouquetController::class, 'customerIndex']);
+
+
+
+
 
 
 
