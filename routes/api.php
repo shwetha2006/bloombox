@@ -5,6 +5,9 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AddOnController;
 use App\Http\Controllers\BouquetController;
+use App\Http\Controllers\ShipmentController;
+use App\Http\Controllers\PaymentController;
+
 
 // --------------------
 // Admin login / logout
@@ -35,8 +38,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::get('/bouquets', [BouquetController::class, 'customerIndex']);
-
-
+    Route::post('/cart/add', [CartController::class, 'add']);
+    Route::post('/orders/confirm', [OrderApiController::class, 'confirm']);
+    Route::get('/orders/{order}', [OrderApiController::class, 'show']);
+    Route::post('/orders', [OrderController::class, 'store']);
+    Route::get('/orders/{order}', [OrderController::class, 'show']);
+    Route::put('/shipments/{shipment}/status', [ShipmentController::class, 'updateStatus']);
+    Route::post('/shipments', [ShipmentController::class, 'store'])->name('api.shipments.store');
+    Route::post('/payments', [PaymentController::class, 'store'])->name('api.payments.store');
 
 
 

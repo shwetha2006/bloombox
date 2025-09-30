@@ -2,51 +2,57 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Shipment;
 use Illuminate\Http\Request;
-use App\Models\Shipment; 
-use App\Http\Resources\ShipmentsResource;
+use Illuminate\Support\Facades\Auth;
 
 class ShipmentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-{
-    // Optional: load related order if needed
-    $shipments = Shipment::with('order')->paginate(10);
-
-    return ShipmentsResource::collection($shipments);
-}
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Customer creates shipment
     public function store(Request $request)
-    {
-        //
+{
+    $validated = $request->validate([
+        'order_id' => 'required|exists:orders,id',
+        'shipment_date' => 'required|date',
+        'address_line1' => 'required|string',
+        'address_line2' => 'nullable|string',
+        'city' => 'required|string',
+        'postal_code' => 'required|string',
+    ]);
+
+   // Add defaults
+    $validated['shipment_cost'] = 800;      // default shipping cost
+    $validated['shipment_status'] = 'pending'; // default status
+
+    $shipment = Shipment::create($validated);
+
+    if ($request->ajax()) {
+        return response()->json([
+            'success' => true,
+            'shipment_id' => $shipment->id,
+            'total_cost' => $shipment->order->total_cost + $shipment->shipment_cost
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+    return redirect()->back()->with('success', 'Shipment saved!');
+}
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+
+    // Admin updates shipment status
+    public function updateStatus(Request $request, Shipment $shipment)
     {
-        //
+        $request->validate([
+            'shipment_status' => 'required|string|max:50',
+        ]);
+
+        $shipment->update([
+            'shipment_status' => $request->shipment_status,
+        ]);
+
+        return response()->json([
+            'message' => 'Shipment status updated successfully',
+            'shipment' => $shipment,
+        ]);
     }
 }

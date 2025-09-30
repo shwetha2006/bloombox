@@ -71,15 +71,17 @@
 
     <div class="p-4">
         <h2 class="text-xl font-semibold mb-2 text-center">{{ $bouquet->name }}</h2>
-        <p class="text-yellow-500 font-bold mb-4 text-center">LKR {{ number_format($bouquet->price, 2) }}</p>
+        
+<div class="flex items-center justify-center gap-2 text-yellow-500 font-bold mb-4">
+    <span>LKR {{ number_format($bouquet->price, 2) }}</span>
+    <livewire:add-to-wishlist :bouquet="$bouquet" />
+</div>
 
-        <button class="w-full bg-yellow-500 text-black py-2 px-4 rounded hover:bg-yellow-600 transition">
-            <a href="{{ route('customer.bouquet-show', $bouquet->id) }}" 
-   class="w-full bg-yellow-500 text-black py-2 px-4 rounded hover:bg-yellow-600 transition inline-block text-center">
+        <a href="{{ route('customer.bouquet-show', $bouquet->id) }}" 
+   class="w-full bg-yellow-500 text-black py-2 px-4 rounded hover:bg-yellow-600 transition flex items-center justify-center">
     <i class="fas fa-cart-plus mr-2"></i> View Bouquet
 </a>
 
-        </button>
     </div>
 </div>
 

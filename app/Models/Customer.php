@@ -28,13 +28,13 @@ class Customer extends Model
         return $this->hasMany(Order::class);
     }
 
-    public function admin()
-{
-    return $this->hasOne(Admin::class);
-}
+//     public function admin()
+// {
+//     return $this->hasOne(Admin::class);
+// }
 
-public function customer()
-{
-    return $this->hasOne(Customer::class);
-}
+// public function customer()
+// {
+//     return $this->hasOne(Customer::class);
+// }
 }

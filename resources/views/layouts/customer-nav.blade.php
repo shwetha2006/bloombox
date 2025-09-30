@@ -5,6 +5,8 @@
     <title>BloomBox</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @vite('resources/css/app.css') {{-- Tailwind --}}
+    @livewireStyles
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
@@ -14,7 +16,7 @@
 <header class="flex justify-between items-center px-6 py-4 bg-black text-white relative">
     
     <!-- Logo -->
-    <a href="{{ url('/') }}" class="flex items-center space-x-3">
+    <a href="{{ url('/dashboard') }}" class="flex items-center space-x-3">
         <img src="{{ asset('images/bloombox.edited.png') }}" 
              alt="Bloombox Logo" 
              class="h-20 w-auto object-contain" />
@@ -26,17 +28,39 @@
     </button>
 
     <!-- Nav links -->
-    <nav id="nav-links" class="hidden md:flex space-x-8 text-lg font-light">
-        <a href="{{ route('customer.bouquets-index') }}" class="hover:text-yellow-400 transition">Bouquets</a>
-        <a href="{{ url('/occasions') }}" class="hover:text-yellow-400 transition">Occasions</a>
-        <a href="{{ url('/flower-lab') }}" class="hover:text-yellow-400 transition">Flower Lab</a>
-        <a href="{{ url('/orders') }}" class="hover:text-yellow-400 transition">Orders</a>
-    </nav>
+<nav id="nav-links" class="hidden md:flex space-x-8 text-lg font-light relative">
+    <a href="{{ route('customer.bouquets-index') }}" class="hover:text-yellow-400 transition">Bouquets</a>
+    
+    <!-- Occasions with dropdown -->
+    <div class="relative group">
+        <a href="{{ url('/occasions') }}" class="hover:text-yellow-400 transition flex items-center">
+            Occasions
+        </a>
+        <div class="absolute left-0 mt-2 w-48 bg-black border border-gray-800 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-50">
+            @foreach($categories as $category)
+                <a href="{{ route('customer.category-bouquets', $category->id) }}" 
+                   class="block px-4 py-2 text-white hover:bg-gray-800 hover:text-yellow-400 transition">
+                    {{ $category->name }}
+                </a>
+            @endforeach
+        </div>
+    </div>
+
+    <a href="{{ url('/flower-lab') }}" class="hover:text-yellow-400 transition">Flower Lab</a>
+    <a href="{{ route('customer.orders') }}" class="hover:text-yellow-400 transition">Orders</a>
+</nav>
+
 
     <!-- Icons -->
-<div class="hidden md:flex items-center space-x-5 text-xl">
-    <i class="fas fa-shopping-cart hover:text-yellow-400 cursor-pointer transition"></i>
+    <div class="hidden md:flex items-center space-x-5 text-xl">
+    <a href="{{ route('cart') }}">
+        <i class="fas fa-shopping-cart hover:text-yellow-400 cursor-pointer transition"></i>
+    </a>
 
+    <!-- Wishlist link -->
+    <a href="{{ route('wishlist') }}">
+        <i class="fas fa-heart hover:text-pink-500 cursor-pointer transition"></i>
+    </a>
     <!-- Logout Icon -->
     <form method="POST" action="{{ route('logout') }}">
         @csrf
@@ -68,6 +92,6 @@
     });
     
 </script>
-
+@livewireScripts
 </body>
 </html>

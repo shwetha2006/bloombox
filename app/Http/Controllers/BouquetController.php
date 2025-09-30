@@ -112,6 +112,7 @@ public function update(Request $request, Bouquet $bouquet)
         'description' => 'nullable|string',
         'stock_quantity' => 'required|integer|min:0',
         'image' => 'nullable|image|max:2048',
+        'category_id' => 'required|exists:categories,id', 
     ]);
 
     // Handle new image upload
@@ -155,6 +156,23 @@ public function update(Request $request, Bouquet $bouquet)
                      ->with('success', 'Bouquet deleted successfully!');
 }
 
+// CustomerController.php or BouquetController.php
+public function categoryBouquets(Category $category)
+{
+    $query = $category->bouquets(); // only bouquets belonging to category
+
+    // Optional: apply price filters
+    if(request()->filled('minPrice')) {
+        $query->where('price', '>=', request('minPrice'));
+    }
+    if(request()->filled('maxPrice')) {
+        $query->where('price', '<=', request('maxPrice'));
+    }
+
+    $bouquets = $query->get();
+
+    return view('customer.bouquet-category', compact('category', 'bouquets'));
+}
 
 
 }

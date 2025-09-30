@@ -20,6 +20,21 @@
             </div>
 
             <div>
+    <x-label for="first_name" :value="__('First Name')" />
+    <x-input id="first_name" class="block mt-1 w-full" type="text" name="first_name" required autofocus />
+</div>
+
+<div>
+    <x-label for="last_name" :value="__('Last Name')" />
+    <x-input id="last_name" class="block mt-1 w-full" type="text" name="last_name" required />
+</div>
+
+<div>
+    <x-label for="mobile_num" :value="__('Mobile Number')" />
+    <x-input id="mobile_num" class="block mt-1 w-full" type="text" name="mobile_num" required />
+</div>
+
+            <div>
     <x-label for="username" value="Username" />
     <x-input id="username" class="block mt-1 w-full" type="text" name="username" required autofocus />
 </div>

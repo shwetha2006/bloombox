@@ -2,49 +2,47 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
+use App\Models\Payment;
 use Illuminate\Http\Request;
-use App\Models\Payment; 
-use App\Http\Resources\PaymentResource;
 
 class PaymentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    // Show checkout page
+    public function checkout(Order $order)
     {
-        //
+        return view('customer.payment', compact('order'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Save payment
     public function store(Request $request)
     {
-        //
-    }
+        $validated = $request->validate([
+            'order_id' => 'required|exists:orders,id',
+            'card_holdername' => 'required|string|max:255',
+            'card_number' => 'required|string|min:12|max:19',
+            'cvv' => 'required|string|min:3|max:4',
+            'payment_method' => 'required|string',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $validated['payment_date'] = now();
+        $validated['total_amount'] = $request->total_amount;
+        $validated['payment_status'] = 'succeeded'; // simulate success
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        $payment = Payment::create($validated);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        session()->forget('cart');
+
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Payment successful!',
+                'payment_id' => $payment->id,
+            ]);
+        }
+
+        return redirect()->route('orders.show', $request->order_id)
+                         ->with('success', 'Payment successful!');
     }
 }

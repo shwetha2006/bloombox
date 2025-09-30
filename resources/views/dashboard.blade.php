@@ -40,35 +40,36 @@
 </div>
 
         <div class="max-w-6xl mx-auto flex flex-wrap justify-center gap-6 px-4">
-            <!-- Wedding Flowers -->
-            <div class="relative w-80 h-[520px] overflow-hidden rounded-lg">
-                <img src="{{ asset('images/wedding.jpg') }}" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10"></div>
-                <h3 class="absolute bottom-8 w-full text-center text-white text-2xl font-medium">Wedding </h3>
-            </div>
+    <!-- Wedding Flowers -->
+    <a href="{{ route('customer.category-bouquets', 102) }}" class="relative w-80 h-[520px] overflow-hidden rounded-lg">
+        <img src="{{ asset('images/wedding.jpg') }}" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10"></div>
+        <h3 class="absolute bottom-8 w-full text-center text-white text-2xl font-medium">Wedding</h3>
+    </a>
 
-            <!-- Middle stacked -->
-            <div class="flex flex-col gap-6">
-                <div class="relative w-80 h-60 overflow-hidden rounded-lg">
-                    <img src="{{ asset('images/anniversary.jpg') }}" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10"></div>
-                    <h3 class="absolute bottom-6 w-full text-center text-white text-2xl font-medium">Anniversary</h3>
-                </div>
+    <!-- Middle stacked -->
+    <div class="flex flex-col gap-6">
+        <a href="{{ route('customer.category-bouquets', 104) }}" class="relative w-80 h-60 overflow-hidden rounded-lg">
+            <img src="{{ asset('images/anniversary.jpg') }}" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10"></div>
+            <h3 class="absolute bottom-6 w-full text-center text-white text-2xl font-medium">Anniversary</h3>
+        </a>
 
-                <div class="relative w-80 h-60 overflow-hidden rounded-lg">
-                    <img src="{{ asset('images/birthday.jpg') }}" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10"></div>
-                    <h3 class="absolute bottom-6 w-full text-center text-white text-2xl font-medium">Birthday</h3>
-                </div>
-            </div>
+        <a href="{{ route('customer.category-bouquets', 103) }}" class="relative w-80 h-60 overflow-hidden rounded-lg">
+            <img src="{{ asset('images/birthday.jpg') }}" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10"></div>
+            <h3 class="absolute bottom-6 w-full text-center text-white text-2xl font-medium">Birthday</h3>
+        </a>
+    </div>
 
-            <!-- Graduation Flowers -->
-            <div class="relative w-80 h-[520px] overflow-hidden rounded-lg">
-                <img src="{{ asset('images/graduation.jpg') }}" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10"></div>
-                <h3 class="absolute bottom-8 w-full text-center text-white text-2xl font-medium">Graduation</h3>
-            </div>
-        </div>
+    <!-- Graduation Flowers -->
+    <a href="{{ route('customer.category-bouquets', 105) }}" class="relative w-80 h-[520px] overflow-hidden rounded-lg">
+        <img src="{{ asset('images/graduation.jpg') }}" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10"></div>
+        <h3 class="absolute bottom-8 w-full text-center text-white text-2xl font-medium">Graduation</h3>
+    </a>
+</div>
+
     </section>
 
 
@@ -118,9 +119,11 @@
         Shop All
     </a>
 </div>
-        
-    </section>
 
+<div>
+          @include('layouts.footer')  
+</div>
+    </section>
     
     @if(session('api_token'))
 <script>

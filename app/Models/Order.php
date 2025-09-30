@@ -14,6 +14,7 @@ class Order extends Model
         'order_status',
         'order_date',
         'total_cost',
+        'customer_id',
     ];
 
     public function customer()
