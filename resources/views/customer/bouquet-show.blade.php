@@ -37,4 +37,7 @@
 @endif
 
     </section>
+    <div>
+          @include('layouts.footer')  
+</div>
 </main>

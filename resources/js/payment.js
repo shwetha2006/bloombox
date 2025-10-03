@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             alert(response.data.message);
-            window.location.href = `/order/${formData.get('order_id')}`;
+            window.location.href = `/orders`;
         } catch (error) {
             console.error("Payment error:", error.response?.data || error.message);
             alert('Payment failed. Try again.');

@@ -10,9 +10,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="{{ asset('css/output.css') }}">
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    @vite('resources/css/app.css') {{-- Tailwind --}}
+    @livewireStyles
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
     <!-- Font Awesome (optional for icons) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -38,3 +40,7 @@
             </form>
         </div> 
     </div>
+
+    @livewireScripts
+
+</body>

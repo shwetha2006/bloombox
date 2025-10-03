@@ -9,18 +9,19 @@ use App\Http\Resources\CustomerResource;
 
 class CustomerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    // public function index()
-    // {
-    //     $customers = Customer::with(['user', 'orders'])->paginate(10);
-    //     return CustomerResource::collection($customers);
-    // }
+  
 
-    public function index()
+    public function index(Request $request)
 {
     $customers = Customer::with('user')->get();
+
+    if ($request->is('api/*')) {
+        return response()->json([
+            'success' => true,
+            'customers' => $customers
+        ]);
+    }
+
     return view('admin.customers.index', compact('customers'));
 }
 

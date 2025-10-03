@@ -22,7 +22,8 @@
             <tbody>
                 @foreach($orderItems as $item)
                 <tr class="border-b border-gray-700">
-                    <td class="p-2">{{ $item->bouquet->name }}</td>
+                    {{-- Null-safe access: show bouquet name or fallback --}}
+                    <td class="p-2">{{ $item->bouquet?->name ?? 'Independent Item' }}</td>
                     <td class="p-2">{{ $item->quantity }}</td>
                     <td class="p-2">LKR {{ number_format($item->price, 2) }}</td>
                     <td class="p-2">LKR {{ number_format($item->price * $item->quantity, 2) }}</td>
@@ -72,7 +73,9 @@
 
             {{-- Show total with shipment and checkout button after saving --}}
             <div id="shipment-summary" class="mt-6 hidden text-center">
-                <p class="text-xl font-bold text-yellow-400">Total with Shipment: LKR <span id="total-with-shipment">{{ number_format($order->total_cost + 800, 2) }}</span></p>
+                <p class="text-xl font-bold text-yellow-400">
+                    Total with Shipment: LKR <span id="total-with-shipment">{{ number_format($order->total_cost + 800, 2) }}</span>
+                </p>
                 <a href="{{ route('payment.checkout', $order->id) }}" 
                    class="mt-4 inline-block bg-green-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-green-600">
                    Proceed to Checkout
@@ -80,4 +83,7 @@
             </div>
         </div>
     </div>
+    <div>
+          @include('layouts.footer')  
+</div>
 </main>

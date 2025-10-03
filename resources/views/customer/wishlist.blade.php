@@ -4,4 +4,8 @@
 
 <main class="bg-black min-h-screen text-white py-10">
     <livewire:WishlistPage />
+
+    <div>
+          @include('layouts.footer')  
+</div>
 </main>

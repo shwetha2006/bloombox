@@ -33,9 +33,9 @@
     
     <!-- Occasions with dropdown -->
     <div class="relative group">
-        <a href="{{ url('/occasions') }}" class="hover:text-yellow-400 transition flex items-center">
+        <p class="hover:text-yellow-400 transition flex items-center">
             Occasions
-        </a>
+</p>
         <div class="absolute left-0 mt-2 w-48 bg-black border border-gray-800 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-50">
             @foreach($categories as $category)
                 <a href="{{ route('customer.category-bouquets', $category->id) }}" 
@@ -46,7 +46,7 @@
         </div>
     </div>
 
-    <a href="{{ url('/flower-lab') }}" class="hover:text-yellow-400 transition">Flower Lab</a>
+    <a href="{{ route('customer.events') }}" class="hover:text-yellow-400 transition">Events</a>
     <a href="{{ route('customer.orders') }}" class="hover:text-yellow-400 transition">Orders</a>
 </nav>
 
@@ -76,8 +76,8 @@
 <div id="mobile-menu" class="hidden bg-black text-white flex-col space-y-4 px-6 py-4 md:hidden">
     <a href="{{ route('customer.bouquets-index') }}" class="block hover:text-yellow-400 transition">Bouquets</a>
     <a href="{{ url('/occasions') }}" class="block hover:text-yellow-400 transition">Occasions</a>
-    <a href="{{ url('/flower-lab') }}" class="block hover:text-yellow-400 transition">Flower Lab</a>
-    <a href="{{ url('/orders') }}" class="block hover:text-yellow-400 transition">Orders</a>
+    <a href="{{ route('customer.events') }}" class="block hover:text-yellow-400 transition">Events</a>
+    <a href="{{ route('customer.orders') }}" class="block hover:text-yellow-400 transition">Orders</a>
     <div class="flex space-x-5 pt-2 text-xl">
         <i class="fas fa-shopping-cart hover:text-yellow-400 cursor-pointer transition"></i>
         <a href="{{ route('admin.login') }}">

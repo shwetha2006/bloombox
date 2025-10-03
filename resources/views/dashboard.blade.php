@@ -81,37 +81,11 @@
         Top picks of the Week
     </h2>
 </div>
+<div class="max-w-6xl mx-auto flex justify-center px-4">
+    <livewire:top-selling-bouquets />
+</div>
 
-        <div class="flex flex-wrap gap-8 max-w-6xl mx-auto justify-center">
-            <!-- Product 1 -->
-            <div style="background-color: black; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); text-align: center; width: 100%; max-width: 350px; flex: 1 1 300px;">
-                <img src="{{ asset('images/bouquet4.jpg') }}" alt="Flora Luxe Bouquet" style="width: 100%; height: 320px; object-fit: cover;">
-                <div style="padding: 36px;">
-                    <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; color: white;">Flora Luxe</div>
-                    <div style="font-size: 1.25rem; font-weight: 700; color: white; margin-bottom: 4px;">Rs. 2500</div>
-                </div>
-            </div>
 
-            <!-- Product 2 -->
-             <div style="background-color: black; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); text-align: center; width: 100%; max-width: 350px; flex: 1 1 300px;">
-                <img src="{{ asset('images/bouquet5.jpg') }}" alt="Flora Luxe Bouquet" style="width: 100%; height: 320px; object-fit: cover;">
-                <div style="padding: 36px;">
-                    <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; color: white;">Flora Luxe</div>
-                    <div style="font-size: 1.25rem; font-weight: 700; color: white; margin-bottom: 4px;">Rs. 2500</div>
-                </div>
-            </div>
-           
-
-            <!-- Product 3 -->
-             <div style="background-color: black; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); text-align: center; width: 100%; max-width: 350px; flex: 1 1 300px;">
-                <img src="{{ asset('images/bouquet7.avif') }}" alt="Rose Riverie Bouquet" style="width: 100%; height: 320px; object-fit: cover;">
-                <div style="padding: 36px;">
-                    <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; color: white;">Rose Riverie</div>
-                    <div style="font-size: 1.25rem; font-weight: 700; color: white; margin-bottom: 4px;">Rs. 3100</div>
-                </div>
-            </div>
-
-        </div>
 
         <div class="flex justify-center mt-6">
     <a href="{{ route('customer.bouquets-index') }}" 

@@ -16,23 +16,24 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($cart as $item)
-                <tr class="border-b border-gray-700">
-                    <td class="p-2 flex items-center gap-4">
-                        <img src="{{ asset('storage/' . $item['image']) }}" alt="{{ $item['name'] }}" class="w-32 h-32 object-cover rounded">
-                        {{ $item['name'] }}
-                    </td>
-                    <td class="p-2">LKR {{ number_format($item['price'], 2) }}</td>
-                    <td class="p-2">{{ $item['quantity'] }}</td>
-                    <td class="p-2">LKR {{ number_format($item['price'] * $item['quantity'], 2) }}</td>
-                    <td class="p-2">
-                        <form action="{{ route('cart.remove', $item['id']) }}" method="POST">
-                            @csrf
-                            <button class="bg-red-500 px-3 py-1 rounded hover:bg-red-600">Remove</button>
-                        </form>
-                    </td>
-                </tr>
+                @foreach($cart as $key => $item)
+                    <tr class="border-b border-gray-700">
+                        <td class="p-2 flex items-center gap-4">
+                            <img src="{{ asset('storage/' . $item['image']) }}" alt="{{ $item['name'] }}" class="w-32 h-32 object-cover rounded">
+                            {{ $item['name'] }}
+                        </td>
+                                <td class="p-2">LKR {{ number_format($item['price'], 2) }}</td>
+                                <td class="p-2">{{ $item['quantity'] }}</td>
+                                <td class="p-2">LKR {{ number_format($item['price'] * $item['quantity'], 2) }}</td>
+                                <td class="p-2">
+                                <form action="{{ route('cart.remove', $key) }}" method="POST">
+                                    @csrf
+                                    <button class="bg-red-500 px-3 py-1 rounded hover:bg-red-600">Remove</button>
+                                </form>
+                        </td>
+                    </tr>
                 @endforeach
+
             </tbody>
         </table>
 
@@ -45,7 +46,7 @@
     </div>
 
     @if(!empty($cart))
-<form id="confirm-order-form">
+<form id="confirm-order-form" action="{{ route('cart.place') }}" method="POST">
     @csrf
     <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700">
         Confirm Order
@@ -53,6 +54,9 @@
 </form>
 @endif
 
+<div>
+          @include('layouts.footer')  
+</div>
 
 </main>
 

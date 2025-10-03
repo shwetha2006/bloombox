@@ -48,12 +48,6 @@
                     </form>
                 </div>
             </div>
-
-            <div>
-                <button class="px-4 py-2 bg-gray-800 text-yellow-400 rounded hover:bg-gray-700 transition">
-                    Availability
-                </button>
-            </div>
         </div>
 
         {{-- Bouquets grid --}}
@@ -80,10 +74,13 @@
         @else
             <p class="text-center text-gray-400">No bouquets available in this category at the moment.</p>
         @endif
+
+        <div>
+          @include('layouts.footer')  
+</div>
     </main>
 
     <script>
-        // Toggle price dropdown
         const priceToggle = document.getElementById('price-toggle');
         const priceDropdown = document.getElementById('price-dropdown');
 
@@ -91,7 +88,6 @@
             priceDropdown.classList.toggle('hidden');
         });
 
-        // Close dropdown when clicking outside
         window.addEventListener('click', (e) => {
             if (!priceToggle.contains(e.target) && !priceDropdown.contains(e.target)) {
                 priceDropdown.classList.add('hidden');

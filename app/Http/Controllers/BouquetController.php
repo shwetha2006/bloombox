@@ -9,8 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\BouquetResource;
 
-
-
 class BouquetController extends Controller
 {
     // Show create form (Web)
@@ -51,10 +49,20 @@ public function show(Bouquet $bouquet)
     // Load related add-ons
     $bouquet->load('addOns');
 
+    // Check if request expects JSON
+    if (request()->wantsJson()) {
+        return response()->json([
+            'success' => true,
+            'data' => $bouquet
+        ]);
+    }
+
+    // Otherwise return web view
     return view('customer.bouquet-show', compact('bouquet'));
 }
 
-    // Store new bouquet (Web + API)
+
+    // Store new bouquet 
     public function store(Request $request)
     {
         $validated = $request->validate([

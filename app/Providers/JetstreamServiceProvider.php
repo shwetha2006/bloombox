@@ -6,6 +6,8 @@ use App\Actions\Jetstream\DeleteUser;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Jetstream\Jetstream;
+use Laravel\Fortify\Features;
+
 
 class JetstreamServiceProvider extends ServiceProvider
 {

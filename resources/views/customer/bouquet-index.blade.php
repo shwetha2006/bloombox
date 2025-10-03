@@ -52,12 +52,6 @@
             </form>
         </div>
     </div>
-
-    <div>
-        <button class="px-4 py-2 bg-gray-800 text-yellow-400 rounded hover:bg-gray-700 transition">
-            Availability
-        </button>
-    </div>
 </div>
 
         {{-- Bouquets grid --}}
@@ -91,6 +85,10 @@
         @else
             <p class="text-center text-gray-400">No bouquets available at the moment.</p>
         @endif
+
+        <div>
+          @include('layouts.footer')  
+</div>
     </main>
 
     <script>

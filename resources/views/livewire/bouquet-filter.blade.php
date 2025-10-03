@@ -20,13 +20,6 @@
         </div>
         @endif
     </div>
-
-    <!-- Availability Filter (placeholder) -->
-    <div>
-        <button class="px-4 py-2 bg-gray-800 text-yellow-400 rounded hover:bg-gray-700 transition">
-            Availability
-        </button>
-    </div>
 </div>
 
 {{-- Bouquets grid --}}

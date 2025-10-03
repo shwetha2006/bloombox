@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Shipment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\ShipmentResource;
+
 
 class ShipmentController extends Controller
 {
@@ -33,6 +35,13 @@ class ShipmentController extends Controller
             'total_cost' => $shipment->order->total_cost + $shipment->shipment_cost
         ]);
     }
+
+    return response()->json([
+        'message' => "Shipment saved successfully",
+        'shipment_id' => $shipment->id,
+        'total_cost' => $shipment->order->total_cost + $shipment->shipment_cost,
+        'shipment' => $shipment
+    ]);
 
 
     return redirect()->back()->with('success', 'Shipment saved!');

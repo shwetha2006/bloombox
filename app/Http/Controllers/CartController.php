@@ -22,7 +22,6 @@ class CartController extends Controller
     }
     return redirect()->route('cart')->with('success', 'Item removed from cart');
 }
-
 }
 
 ?>

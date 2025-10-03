@@ -1,5 +1,8 @@
 @include('admin.header')
 
+@vite('resources/js/bouquet.js') {{-- Axios JS included --}}
+
+
         <div style="display: flex; flex: 1;">
             @include('layouts.admin_nav')
             
@@ -92,18 +95,17 @@
                                             </a>
                                             
                                             <!-- Delete Button -->
-                                            <form action="{{ route('admin.bouquets.destroy', $b->id) }}" method="POST" style="display: inline;" 
-                                                  onsubmit="return confirm('Are you sure you want to delete this bouquet? This action cannot be undone.')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                        title="Delete Bouquet"
-                                                        style="background-color: #7a2d2d; color: #ffffff; padding: 8px 12px; border-radius: 4px; border: none; font-size: 0.85rem; font-weight: 500; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 4px; cursor: pointer;"
-                                                        onmouseover="this.style.backgroundColor='#9a3d3d'; this.style.transform='translateY(-1px)'"
-                                                        onmouseout="this.style.backgroundColor='#7a2d2d'; this.style.transform='translateY(0)'">
-                                                    🗑️ Delete
-                                                </button>
-                                            </form>
+                                           <!-- Delete Button (Axios-based) -->
+<button type="button" 
+        class="delete-bouquet-btn"
+        data-id="{{ $b->id }}"
+        title="Delete Bouquet"
+        style="background-color: #7a2d2d; color: #ffffff; padding: 8px 12px; border-radius: 4px; border: none; font-size: 0.85rem; font-weight: 500; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 4px; cursor: pointer;"
+        onmouseover="this.style.backgroundColor='#9a3d3d'; this.style.transform='translateY(-1px)'"
+        onmouseout="this.style.backgroundColor='#7a2d2d'; this.style.transform='translateY(0)'">
+    🗑️ Delete
+</button>
+
                                         </div>
                                     </td>
                                 </tr>
